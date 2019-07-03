@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>vue入门</title>
+		<script src="../js/vue.js"></script>
+		<link rel="stylesheet" type="text/css" href="../css/index.css" />
+	</head>
+	<body>
+		<div id="root" class="root">
+			<input v-model="inputValue" />
+			<button @click="submit">提交</button>
+			<ul>
+				<todo-item 
+					v-for="(item,index) of list" 
+					:key="index" 
+					:content="item"
+					:index="index"
+					>
+				</todo-item>
+			</ul>
+		</div>
+		<script>
+			//全局组件
+			Vue.component("todo-item", {
+				props: ['content','index'],
+				template: '<li @click="handleClick">{{content}}</li>',
+				methods:{
+					handleClick () {
+						console.log(this.index)
+						this.$parent.handledDelete()
+					}
+				}
+			})
+			// 局部组件
+			// var TodoItem = {
+			// 	props:['content'],
+			// 	template:"<li>{{content}}</li>"
+			// }
+			new Vue({
+				el: '#root',
+				// components:{//局部组件
+				// 	"todo-item":TodoItem
+				// },
+				data: {
+					inputValue: '',
+					list: []
+				},
+				methods: {
+					submit() {
+						this.list.push(this.inputValue)
+						this.inputValue = ''
+					},
+					handledDelete(index) {
+						this.list.splice(index,1)
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
